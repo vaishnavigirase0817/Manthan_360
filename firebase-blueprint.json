@@ -1,0 +1,122 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "createdAt", "updatedAt"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Uploaded revision materials and their compiled AI summaries, flashcards, flowcharts, and mindmaps",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "fileName": { "type": "string" },
+        "fileUrl": { "type": "string" },
+        "extractedText": { "type": "string" },
+        "status": { "type": "string", "enum": ["uploaded", "processing", "completed", "failed"] },
+        "summary": { "type": "object" },
+        "flashcards": { "type": "array" },
+        "mindMap": { "type": "object" },
+        "flowchart": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "extractedText", "status", "createdAt", "updatedAt"]
+    },
+    "Quiz": {
+      "title": "Quiz",
+      "description": "AI Generated interactive quiz based on imported notes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "noteId": { "type": "string" },
+        "noteTitle": { "type": "string" },
+        "questions": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "noteId", "noteTitle", "questions", "createdAt"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Log of quiz attempts with final scores and user answers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "quizId": { "type": "string" },
+        "score": { "type": "integer" },
+        "totalQuestions": { "type": "integer" },
+        "answers": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "quizId", "score", "totalQuestions", "answers", "createdAt"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "Full conversation transcripts for the AI Tutor sessions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "noteId": { "type": "string" },
+        "messages": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "noteId", "messages", "createdAt", "updatedAt"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "Gamification progress profile containing XP, level, streak, achievements, and badges",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "xp": { "type": "integer" },
+        "level": { "type": "integer" },
+        "streak": { "type": "integer" },
+        "lastActive": { "type": "string", "format": "date-time" },
+        "badges": { "type": "array" },
+        "achievements": { "type": "array" }
+      },
+      "required": ["userId", "xp", "level", "streak", "lastActive", "badges", "achievements"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Collection of basic user data and profiles"
+    },
+    "userProgress/{userId}": {
+      "schema": "UserProgress",
+      "description": "Collection of gamification progress and achievements profiles"
+    },
+    "notes/{noteId}": {
+      "schema": "Note",
+      "description": "Collection of uploaded notes and their extracted text and modules"
+    },
+    "quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "Collection of AI-generated quizzes for study testing"
+    },
+    "quizAttempts/{attemptId}": {
+      "schema": "QuizAttempt",
+      "description": "Collection of study session quiz response attempts and scores"
+    },
+    "chatSessions/{chatId}": {
+      "schema": "ChatSession",
+      "description": "Collection of conversations between the AI tutor and the student"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Developer Sandbox Permission: allows all operations in pre-built testing environment
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
